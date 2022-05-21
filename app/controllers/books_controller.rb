@@ -3,6 +3,7 @@ class BooksController < ApplicationController
 
   # GET /books or /books.json
   def index
+    # Book.allで取得するデータが複数の本のデータを格納している
     @books = Book.all
   end
 
@@ -21,13 +22,15 @@ class BooksController < ApplicationController
 
   # POST /books or /books.json
   def create
-    @book = Book.new(book_params)
+    @book = Book.new(book_params) # リクエストパラメータを使って本のデータを作る
 
     respond_to do |format|
-      if @book.save
+      if @book.save # 本のデータを保存する
+        # 成功したらshow画面へ
         format.html { redirect_to @book, notice: "Book was successfully created." }
         format.json { render :show, status: :created, location: @book }
       else
+        # 保存失敗したらnew画面へ（元の画面）
         format.html { render :new, status: :unprocessable_entity }
         format.json { render json: @book.errors, status: :unprocessable_entity }
       end
@@ -64,6 +67,7 @@ class BooksController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def book_params
+      # permitは、パラメータの内容を制限。意図していないデータが入ってくるのを防ぐための仕組み。bookのtitle, memoだけを受け取るようにしています。
       params.require(:book).permit(:title, :memo)
     end
 end
